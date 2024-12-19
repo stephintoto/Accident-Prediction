@@ -1,0 +1,213 @@
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    transition: width 0.3s ease-in-out;
+    background-color: #897e45; /* Light gray background */
+    border-right: 2px solid #897e45;
+    overflow-x: hidden;
+}
+
+.sidebar.collapsed {
+    width: 70px; /* Collapsed width */
+}
+
+.sidebar .toggle-btn {
+    position: absolute;
+    top: 10px;
+    left: 15px; /* Position the toggle button */
+    z-index: 1100;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #336da8; /* Dark blue */
+    color: white;
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: 0.3s ease;
+}
+
+.sidebar .toggle-btn:hover {
+    background-color: #001d33;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar .nav-text {
+    margin-left: 10px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar.collapsed .nav-text {
+    opacity: 0; /* Hide text when collapsed */
+}
+
+.sidebar .nav-item:hover {
+    background-color: #448bd3;
+    color: white;
+    box-shadow: 0 0 10px rgba(78, 133, 189, 0.7); /* Glowing effect */
+    transition: 0.3s ease;
+}
+
+.nav-link:hover {
+    color: white; /* Ensure text remains visible */
+}
+
+.content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.sidebar.collapsed + .content {
+    margin-left: 70px;
+}
+/* General Flipping Card Wrapper */
+.card-wrapper {
+    perspective: 1000px; /* Enable 3D space */
+    margin: 20px; /* Added equal spacing */
+    display: inline-block; /* Inline-block for multiple cards on a row */
+}
+
+.card-inner {
+    position: relative;
+    width: 400px; /* Increased width for a rectangular shape */
+    height: 200px; /* Reduced height */
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out;
+    background-color: #f9f9f9; /* Subtle background */
+    border-radius: 15px; /* Rounded corners for modern look */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-wrapper:hover .card-inner {
+    transform: rotateY(180deg); /* Rotate on hover */
+}
+
+/* Front and Back Styles */
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px; /* Equalized padding */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Front Side Styling */
+.card-front {
+    background-color: #2498c9; /* Solid red */
+    color: white; /* White text */
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* Back Side Styling */
+.card-back {
+    background-color: #ffffff; /* White back */
+    color: #2498c9; /* Red text */
+    transform: rotateY(180deg);
+    text-align: center;
+    font-family: Arial, sans-serif;
+    border: 2px solid #4189dc;
+}
+
+/* Card Titles */
+.card-title {
+    font-size: 1.2rem; /* Adjusted size for readability */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px; /* Reduced spacing for balance */
+}
+
+/* Card Numbers Styling */
+.card-front h2 {
+    font-size: 2rem; /* Smaller size for numbers */
+    font-weight: bold;
+    margin-top: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Back Text Content */
+.card-back p {
+    font-size: 1rem; /* Adjusted size */
+    line-height: 1.4; /* Added spacing for readability */
+    text-align: center;
+}
+
+/* Grid Styling for Alignment */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Uniform spacing between cards */
+    margin: 20px;
+}
+
+/* Hover Elevation Effect */
+.card-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Text Scaling */
+@media (max-width: 768px) {
+    .card-inner {
+        width: 300px; /* Adjust width for smaller screens */
+        height: 180px; /* Maintain rectangular proportions */
+    }
+
+    .card-title {
+        font-size: 1rem; /* Adjust title size */
+    }
+
+    h2 {
+        font-size: 1.5rem; /* Smaller number font */
+    }
+
+    .card-back p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Dropdown Styling */
+.dropdown {
+    margin: 20px;
+}
+
+.dropdown select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+.dropdown select:focus {
+    border-color: #003366; /* Color for the focus state */
+    outline: none;
+}
+
+.map-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for the icon */
+.map-icon:hover {
+    background-color: #0056b3;
+}

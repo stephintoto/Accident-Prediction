@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/severity.css') }}">
+    <title>Accident Severity Prediction</title>
+    <script>
+        function updatePoliceStations() {
+            const district = document.getElementById("district").value;
+            const psDropdown = document.getElementById("ps_name");
+
+            // Clear existing options
+            psDropdown.innerHTML = '<option value="">Select Police Station</option>';
+
+            if (district) {
+                fetch(`/fetch_police_stations?district=${district}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(station => {
+                            const option = document.createElement("option");
+                            option.value = station;
+                            option.textContent = station;
+                            psDropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error("Error fetching police stations:", error));
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Accident Severity Prediction</h1>
+        <form method="post">
+
+            <!-- District Dropdown -->
+            <label for="district">District:</label>
+            <select name="district" id="district" onchange="updatePoliceStations()" required>
+                <option value="">Select District</option>
+                {% for district in districts %}
+                <option value="{{ district }}">{{ district }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Police Station Dropdown -->
+            <label for="ps_name">Police Station Name:</label>
+            <select name="ps_name" id="ps_name" required>
+                <option value="">Select Police Station</option>
+            </select>
+
+            <!-- Accident Time of Day -->
+            <label for="accident_time_of_day">Accident Time of Day:</label>
+            <select name="accident_time_of_day" id="accident_time_of_day" required>
+                <option value="">Select Time</option>
+                <option value="Midnight">Midnight</option>
+                <option value="Early Morning">Early Morning</option>
+                <option value="Morning">Morning</option>
+                <option value="Late Morning">Late Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Late Afternoon">Late Afternoon</option>
+                <option value="Evening">Evening</option>
+                <option value="Night">Night</option>
+            </select>
+
+            <!-- Weather -->
+            <label for="weather">Weather:</label>
+            <select name="weather" id="weather" required>
+                <option value="">Select Weather</option>
+                <option value="Clear">Clear</option>
+                <option value="Cloudy">Cloudy</option>
+                <option value="Sunny">Sunny</option>
+                <option value="Rainy">Rainy</option>
+                <option value="Mist/Fog">Mist/Fog</option>
+            </select>
+
+            <!-- Type Area -->
+            <label for="type_area">Type Area:</label>
+            <select name="type_area" id="type_area" required>
+                <option value="">Select Type Area</option>
+                <option value="Urban">Urban</option>
+                <option value="Rural">Rural</option>
+            </select>
+
+            <!-- Type Road -->
+            <label for="type_road">Type Road:</label>
+            <select name="type_road" id="type_road" required>
+                <option value="">Select Type Road</option>
+                <option value="National Highway">National Highway</option>
+                <option value="State Highway">State Highway</option>
+                <option value="Bypass">Bypass</option>
+                <option value="ODR">ODR</option>
+                <option value="MDR">MDR</option>
+                <option value="Other Road">Other Road</option>
+            </select>
+
+            <!-- Lanes Road -->
+            <label for="lanes_road">Lanes Road:</label>
+            <select name="lanes_road" id="lanes_road" required>
+                <option value="">Select Lanes</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Four lanes">Four lanes</option>
+                <option value="Six lanes">Six lanes</option>
+            </select>
+
+            <!-- Divider -->
+            <label for="divider">Divider:</label>
+            <select name="divider" id="divider" required>
+                <option value="">Select Divider</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <!-- Traffic Control -->
+            <label for="traffic_control">Traffic Control:</label>
+            <select name="traffic_control" id="traffic_control" required>
+                <option value="">Select Traffic Control</option>
+                <option value="Uncontrolled">Uncontrolled</option>
+                <option value="Police controlled">Police controlled</option>
+                <option value="Stop sign">Stop sign</option>
+                <option value="Traffic light signal">Traffic light signal</option>
+                <option value="Flashing signal/blinker">Flashing signal/blinker</option>
+            </select>
+
+            <!-- Accident Factor -->
+            <label for="accident_factor">Accident Factor:</label>
+            <select name="accident_factor" id="accident_factor" required>
+                <option value="">Select Factor</option>
+                <option value="Visibility">Visibility</option>
+                <option value="Over speeding">Over speeding</option>
+                <option value="Drunk and drive">Drunk and drive</option>
+                <option value="Using mobile phones">Using mobile phones</option>
+                <option value="Weather">Weather</option>
+                <option value="Drowsy driving">Drowsy driving</option>
+                <option value="Wrong side">Wrong side</option>
+                <option value="Mechanical defect">Mechanical defect</option>
+                <option value="Traffic violation">Traffic violation</option>
+                <option value="Road conditions">Road conditions</option>
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+        <h2>Predicted Accident Severity: {{ prediction }}</h2>
+        {% endif %}
+    </div>
+</body>
+</html>
