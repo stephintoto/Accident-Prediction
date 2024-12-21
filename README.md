@@ -61,11 +61,6 @@ Follow the steps below to set up and run the project locally.
 2. Use the filter dropdowns to refine your analysis based on specific criteria (district, police station, etc.).
 3. Explore the interactive map to view accident trends.
 
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ## Acknowledgments
 
 - Bootstrap for frontend styling.
