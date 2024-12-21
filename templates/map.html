@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Traffic Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/static/map.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Traffic Incident Map</h1>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="district-dropdown" class="form-label">District</label>
+                <select id="district-dropdown" class="form-select">
+                    <option value="All">All Districts</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="taluk-dropdown" class="form-label">Taluk</label>
+                <select id="taluk-dropdown" class="form-select">
+                    <option value="All">All Taluks</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <iframe id="map-frame" name="map-frame" src="/static/traffic_map2.html" width="100%" height="600" frameborder="0"
+                title="Traffic Incident Map"></iframe>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Populate district dropdown
+            $.getJSON('/list_districts', function (data) {
+                const districtDropdown = $('#district-dropdown');
+                districtDropdown.empty();
+                data.forEach(district => {
+                    districtDropdown.append(new Option(district, district));
+                });
+            });
+
+            // Populate taluk dropdown based on selected district
+            $('#district-dropdown').change(function () {
+                const selectedDistrict = $(this).val();
+                $.getJSON(`/list_taluks/${selectedDistrict}`, function (data) {
+                    const talukDropdown = $('#taluk-dropdown');
+                    talukDropdown.empty();
+                    data.forEach(taluk => {
+                        talukDropdown.append(new Option(taluk, taluk));
+                    });
+                });
+                updateMap(selectedDistrict, "All");
+            });
+
+            // Update map based on selected taluk
+            $('#taluk-dropdown').change(function () {
+                const selectedDistrict = $('#district-dropdown').val();
+                const selectedTaluk = $(this).val();
+                updateMap(selectedDistrict, selectedTaluk);
+            });
+
+            // Function to update the map
+            function updateMap(district, taluk) {
+                $.ajax({
+                    url: '/generate_traffic_map',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ district: district, taluk: taluk }),
+                    success: function (response) {
+                        // Update iframe with the new map URL
+                        $('#map-frame').attr('src', '/static/' + response.map_url);
+
+                        // Preserve dropdown selections
+                        $('#district-dropdown').val(district);
+                        $('#taluk-dropdown').val(taluk);
+                    },
+                    error: function () {
+                        alert('Error generating the map. Please try again.');
+                    }
+                });
+            }
+
+            // Initialize with all districts and taluks
+            updateMap("All", "All");
+        });
+    </script>
+</body>
+
+</html>
